@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
 const HistoryView = ({ onViewScan }) => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,7 +21,7 @@ const HistoryView = ({ onViewScan }) => {
     toast.info("Fetching scan history...");
 
     try {
-      const response = await fetch("/api/scan/history");
+      const response = await fetch(`${API_BASE_URL}/scan/history`);
 
       if (!response.ok) {
         const text = await response.text();
@@ -51,7 +53,7 @@ const HistoryView = ({ onViewScan }) => {
   const deleteScan = async (scanId) => {
 
     try {
-      const response = await fetch(`/api/scan/${scanId}`, { method: "DELETE" });
+      const response = await fetch(`${API_BASE_URL}/scan/${scanId}`, { method: "DELETE" });
 
       if (!response.ok) {
         throw new Error(`Failed to delete scan: ${response.statusText}`);
@@ -83,7 +85,7 @@ const HistoryView = ({ onViewScan }) => {
     }
 
     try {
-      const response = await fetch(`/api/scan/export/${scanId}/${type}`, {
+      const response = await fetch(`${API_BASE_URL}/scan/export/${scanId}/${type}`, {
         method: "GET",  
       });
 

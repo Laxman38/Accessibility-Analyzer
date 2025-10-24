@@ -7,6 +7,8 @@ import VisualMap from "./VisualMap";
 import FixPanel from "./FixPanel";
 import HistoryView from "./HistoryView";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
 const TABS = ["New Scan", "Results", "Visual Map", "Fix Guidance", "History"];
 
 const AccessibilityReport = () => {
@@ -37,7 +39,7 @@ const AccessibilityReport = () => {
     try {
       toast.info("Generating accessibility report...");
       const response = await fetch(
-        `/api/scan/export/${scanResults._id}/${type}`
+        `${API_BASE_URL}/scan/export/${scanResults._id}/${type}`
       );
       if (!response.ok) {
         const text = await response.text();

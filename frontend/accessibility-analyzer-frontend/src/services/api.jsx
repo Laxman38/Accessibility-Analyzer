@@ -77,9 +77,8 @@ const getScanHistory = async () => {
 
 const exportReport = async (scanId, format = "pdf") => {
   try {
-    const response = await api.post(
-      `/scan/export/${format}`,
-      { scanId },
+    const response = await api.get(
+      `/scan/export/${scanId}/${format}`,
       { responseType: "blob" }
     );
     return response.data;

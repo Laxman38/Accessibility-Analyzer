@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import { fileURLToPath } from "url";
 
 import corsConfig from './middleware/corsConfig.js';
 import scanRoutes from './routes/scanRoutes.js';
