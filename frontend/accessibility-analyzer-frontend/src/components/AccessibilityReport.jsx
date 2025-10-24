@@ -154,7 +154,15 @@ const AccessibilityReport = () => {
         {activeTab === "Fix Guidance" && (
           <FixPanel selectedIssue={selectedIssue} />
         )}
-        {activeTab === "History" && <HistoryView />}
+        {activeTab === "History" && (
+          <HistoryView
+            onViewScan={(scan) => {
+              setScanResults(scan);
+              setActiveTab("Results");
+              toast.success("Loaded previous scan results!");
+            }}
+          />
+        )}
       </main>
     </div>
   );

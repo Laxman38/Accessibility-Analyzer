@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-const HistoryView = () => {
+const HistoryView = ({ onViewScan }) => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -49,7 +49,6 @@ const HistoryView = () => {
   };
 
   const deleteScan = async (scanId) => {
-    if (!window.confirm("Are you sure you want to delete this scan?")) return;
 
     try {
       const response = await fetch(`/api/scan/${scanId}`, { method: "DELETE" });
@@ -202,7 +201,7 @@ const HistoryView = () => {
                   onSelect={() => handleScanSelect(scan._id)}
                   onDelete={() => deleteScan(scan._id)}
                   onExport={() => exportScanReport(scan._id, "pdf")}
-                  onView={() => navigate(`/scan/${scan._id}`)}
+                  onView={() => onViewScan(scan)}
                 />  
               ))}
             </tbody>
@@ -231,6 +230,7 @@ function HistoryRow({
 
   const { date, time } = formatDate(scan.timestamp);
   const source = scan.url || scan.source || "Unknown";
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
 
   return (
     <tr className={`history-row ${isSelected ? "selected" : ""}`}>
@@ -274,9 +274,26 @@ function HistoryRow({
         >
           📄
         </button>
-        <button className="action-btn delete" title="Delete" onClick={onDelete}>
-          🗑️
-        </button>
+        {!confirmingDelete ? (
+          <button
+            className="action-btn delete"
+            onClick={() => setConfirmingDelete(true)}
+          >
+            🗑️
+          </button>
+        ) : (
+          <>
+            <button className="action-btn confirm" onClick={onDelete}>
+              ✅
+            </button>
+            <button
+              className="action-btn cancel"
+              onClick={() => setConfirmingDelete(false)}
+            >
+              ❌
+            </button>
+          </>
+        )}
       </td>
     </tr>
   );

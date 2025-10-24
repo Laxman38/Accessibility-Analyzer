@@ -12,7 +12,6 @@ async function generatePdfReport(scanId, outputPath) {
       const doc = new PDFDocument({ margin: 40 });
       const writeStream = fs.createWriteStream(outputPath);
 
-      // Wait for stream to finish before resolving
       writeStream.on("finish", () => {
         console.log(`PDF generated: ${outputPath}`);
         resolve();
@@ -25,17 +24,14 @@ async function generatePdfReport(scanId, outputPath) {
 
       doc.pipe(writeStream);
 
-      // Header
       doc.fontSize(18).text("Accessibility Report", { align: "center" });
       doc.moveDown();
 
-      // Scan info
       doc.fontSize(12).text(`URL: ${scan.url || scan.source || "Unknown"}`);
       doc.text(`Scanned At: ${scan.timestamp}`);
       doc.text(`Total Violations: ${scan.violations?.length || 0}`);
       doc.moveDown();
 
-      // Violations list
       (scan.violations || []).forEach((v, i) => {
         doc.fontSize(14).text(`${i + 1}. ${v.id} (${v.impact})`, { underline: true });
         doc.fontSize(11).text(v.description || "");
